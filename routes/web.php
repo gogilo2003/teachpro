@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,45 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
+});
+
+Route::prefix('courseouteline')->group(function(){
+    Route::get('',function(){
+        $artisan1 = collect(Storage::allFiles('public/courseoutline/Artisan/Year1'))->map(function($image){
+            // Read image path, convert to base64 encoding
+            $imgData = base64_encode(Storage::get($image));
+
+            // Format the image SRC:  data:{mime};base64,{data};
+            $src = 'data: '.Storage::mimeType($image).';base64,'.$imgData;
+
+            // Echo out a sample image
+            return $src;
+        });
+
+        $artisan2 = collect(Storage::allFiles('public/courseoutline/Artisan/Year2'))->map(function($image){
+            // Read image path, convert to base64 encoding
+            $imgData = base64_encode(Storage::get($image));
+
+            // Format the image SRC:  data:{mime};base64,{data};
+            $src = 'data: '.Storage::mimeType($image).';base64,'.$imgData;
+
+            // Echo out a sample image
+            return $src;
+        });
+
+        $nita1 = collect(Storage::allFiles('public/courseoutline/Artisan/NITA1'))->map(function($image){
+            // Read image path, convert to base64 encoding
+            $imgData = base64_encode(Storage::get($image));
+
+            // Format the image SRC:  data:{mime};base64,{data};
+            $src = 'data: '.Storage::mimeType($image).';base64,'.$imgData;
+
+            // Echo out a sample image
+            return $src;
+        });
+
+        return view('courseouteline',compact('artisan1','artisan2','nita1'));
+    });
 });
 
 Route::middleware([
